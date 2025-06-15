@@ -1,0 +1,17 @@
+[package]
+name = "ncash_rs-v1"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ctrlc = { version = "3.4", features = ["termination"] }
+rustyline = { version = "12.0", features = ["with-dirs"] }
+dirs = "5.0"
+whoami = "1.5"
+chrono = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+shellexpand = "3.1"
+nix = "0.26"  # Для обработки сигналов
+crossterm = "0.26"
+tui = "0.19"
