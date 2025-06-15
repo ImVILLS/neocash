@@ -1,0 +1,12 @@
+pkgbase = neocash
+	pkgdesc = NeoCASH shell (build from source)
+	pkgver = 1.0.0
+	pkgrel = 1
+	url = https://github.com/yourname/neocash
+	arch = x86_64
+	license = MIT
+	makedepends = cargo
+	source = https://github.com/ImVILLS/neocash/archive/v1.0.0.tar.gz
+	sha256sums = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+pkgname = neocash

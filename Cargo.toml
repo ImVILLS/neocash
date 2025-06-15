@@ -1,6 +1,7 @@
 [package]
-name = "ncash_rs-v1"
-version = "0.1.0"
+name = "neocash"
+version = "1.0.0"
+authors = ["ImVILLS <cloxi19@gmail.com>"]
 edition = "2024"
 
 [dependencies]

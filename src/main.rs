@@ -13,9 +13,9 @@ use rustyline::{
     Helper, 
     Context,
 };
-use ncash_rs_v1::config::ShellConfig;
-use ncash_rs_v1::prompt::{get_prompt_context, render_prompt};
-use ncash_rs_v1::completion::ShellCompleter;
+use neocash::config::ShellConfig;
+use neocash::prompt::{get_prompt_context, render_prompt};
+use neocash::completion::ShellCompleter;
 
 static RUNNING: AtomicBool = AtomicBool::new(true);
 

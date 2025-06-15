@@ -350,8 +350,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "ncash_rs-v1"
-version = "0.1.0"
+name = "neocash"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "crossterm 0.26.1",
