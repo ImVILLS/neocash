@@ -9,7 +9,11 @@ A modern command shell written in Rust, successor to the CASH project (Cash is A
 
 ### Arch Linux (AUR)
 ```bash
+# for yay
 yay -S neocash
+
+# for paru
+paru -S neocash
 ```
 
 ### From Source
