@@ -4,7 +4,7 @@
 [![AUR](https://img.shields.io/aur/version/neocash)](https://aur.archlinux.org/packages/neocash)
 
 **NeoCASH** is a modern shell written in Rust.
-We are building a **new era** of shells that are **community-driven**: their development, functionality, and future are determined by the active participation, ideas, and contributions of every member of our community. It's a shell that grows with you.**NeoCASH** is a modern shell written in Rust.
+We are building a **new era** of shells that are **community-driven**: their development, functionality, and future are determined by the active participation, ideas, and contributions of every member of our community. It's a shell that grows with you.
 
 ## 📦 Installation
 
