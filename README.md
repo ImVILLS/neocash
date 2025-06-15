@@ -1,9 +1,10 @@
-# NeoCASH (New Era of CASH)
+# NeoCASH (New Era of Community Addicted SHells)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AUR](https://img.shields.io/aur/version/neocash)](https://aur.archlinux.org/packages/neocash)
 
-A modern command shell written in Rust, successor to the CASH project (Cash is Absolute SHell)
+**NeoCASH** is a modern shell written in Rust.
+We are building a **new era** of shells that are **community-driven**: their development, functionality, and future are determined by the active participation, ideas, and contributions of every member of our community. It's a shell that grows with you.**NeoCASH** is a modern shell written in Rust.
 
 ## 📦 Installation
 
