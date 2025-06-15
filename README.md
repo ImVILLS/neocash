@@ -3,42 +3,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AUR](https://img.shields.io/aur/version/neocash)](https://aur.archlinux.org/packages/neocash)
 
-Современная командная оболочка на Rust, наследник проекта CASH (Cash is Absolute SHell)
+A modern command shell written in Rust, successor to the CASH project (Cash is Absolute SHell)
 
-## 📦 Установка
+## 📦 Installation
 
 ### Arch Linux (AUR)
 ```bash
 yay -S neocash
 ```
 
-### Из исходников
+### From Source
 ```bash
 cargo install --git https://github.com/ImVILLS/neocash
 ```
 
-## ✨ Текущие возможности
-- Базовый шелл с поддержкой команд
-- История команд
-- Кастомизируемый промпт
-- Заготовка для автодополнения
+## ✨ Current Features
+- Basic shell with command support
+- Command history
+- Customizable prompt
+- Command autocompletion foundation
 
-## 🚧 Планы развития
-- [ ] Система автодополнения путей/файлов
-- [ ] Поддержка bash/zsh-скриптов
-- [ ] Собственный скриптовый язык CAS (CASH Absolute Script)
-- [ ] Цветной вывод и темы
+## 🚧 Roadmap
+- [ ] Path/file autocompletion system
+- [ ] Bash/zsh script support
+- [ ] Custom scripting language CAS (CASH Absolute Script)
+- [ ] Colored output and themes
 
-## 🛠 Сборка
+## 🛠 Building
 ```bash
 cargo build --release
-strip target/release/neocash  # Для уменьшения размера
+strip target/release/neocash  # To reduce binary size
 ```
 
-## 🤝 Участие
-1. Форкните репозиторий
-2. Создайте ветку для фичи (`git checkout -b feature/your-feature`)
-3. Сделайте Pull Request
+## 🤝 Contributing
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Submit a Pull Request
 
-## 📜 Лицензия
+## 📜 License
 MIT © 2025 [ImVILLS](https://github.com/ImVILLS)
