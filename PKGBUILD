@@ -8,7 +8,7 @@ url="https://github.com/yourname/neocash"
 license=('MIT')
 makedepends=('cargo')
 source=("https://github.com/ImVILLS/neocash/archive/v$pkgver.tar.gz")
-sha256sums=('')
+sha256sums=('351d359c4715dfbbb3621172ab70561cc5577ff8e072de903f0ee739c8703218')
 
 build() {
   cd "$srcdir/neocash-$pkgver"
