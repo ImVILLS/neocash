@@ -1,4 +1,4 @@
-# NeoCASH (New Era of Community Addicted SHells)
+# NeoCASH (New Era of Community-Adaptive SHells)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AUR](https://img.shields.io/aur/version/neocash)](https://aur.archlinux.org/packages/neocash)
