@@ -31,7 +31,7 @@ cargo install --git https://github.com/ImVILLS/neocash
 - [ ] Path/file autocompletion system
 - [ ] Bash/zsh script support
 - [ ] Custom scripting language CAS (CASH Absolute Script)
-- [ ] Colored output and themes
+- [ ] Plugin supporting
 
 ## 🛠 Building
 ```bash
