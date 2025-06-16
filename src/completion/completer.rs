@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::path::PathBuf;
 use std::ffi::OsStr;
 use std::fs;
@@ -19,12 +20,15 @@ impl ShellCompleter {
         }
     }
 
-    fn get_all_commands(&self) -> Vec<String> {
+    /// Returns a list of all commands available in the system's PATH.
+    /// Returns a sorted vector of command names.
+    /// Uses a HashSet to avoid duplicates.
+    pub fn get_all_commands(&self) -> Vec<String> {
         let path_var = std::env::var("PATH").unwrap_or_default();
         let path_dirs = path_var.split(':').map(PathBuf::from);
 
         let mut commands = Vec::new();
-        let mut seen = std::collections::HashSet::new();
+        let mut seen = HashSet::new();
 
         for dir in path_dirs {
             if let Ok(entries) = fs::read_dir(dir) {
@@ -38,19 +42,15 @@ impl ShellCompleter {
                 }
             }
         }
-
         commands.sort();
         commands
     }
 
-    fn filter_commands(&self, prefix: &str) -> Vec<Pair> {
+    pub fn filter_commands(&self, prefix: &str) -> Vec<Pair> {
         self.get_all_commands()
             .into_iter()
             .filter(|cmd| cmd.starts_with(prefix))
-            .map(|cmd| Pair {
-                display: cmd.clone(),
-                replacement: cmd,
-            })
+            .map(|cmd| Pair { display: cmd.clone(), replacement: cmd })
             .collect()
     }
 

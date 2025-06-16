@@ -1,6 +1,6 @@
 [package]
 name = "neocash"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["ImVILLS <cloxi19@gmail.com>"]
 edition = "2024"
 
@@ -16,3 +16,10 @@ shellexpand = "3.1"
 nix = "0.26"  # Для обработки сигналов
 crossterm = "0.26"
 tui = "0.19"
+
+[dev-dependencies]
+criterion = "0.4"
+
+[[bench]]
+name = "benchmarks"
+harness = false
