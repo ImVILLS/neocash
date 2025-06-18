@@ -1,4 +1,4 @@
-pkgbase = neocash-git
+pkgbase = neocash
 	pkgdesc = New Era of Community-Adaptive SHell
 	pkgver = 1.0.2
 	pkgrel = 1
@@ -9,6 +9,6 @@ pkgbase = neocash-git
 	depends = rust
 	depends = git
 	source = git+https://github.com/ImVILLS/neocash.git#tag=v1.0.2
-	sha256sums = SKIP
+	sha256sums = 8a7477b402b570164d57e3aca1f4d9da99ec8e11b371793167bec18fc3c9421b
 
-pkgname = neocash-git
+pkgname = neocash
