@@ -1,22 +1,23 @@
 # Maintainer: ImVILLS <cloxi19@gmail.com>
 pkgname=neocash
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
-pkgdesc="NeoCASH shell (build from source)"
+pkgdesc="New Era of Community-Adaptive SHell"
 arch=('x86_64')
-url="https://github.com/yourname/neocash"
+url="https://github.com/ImVILLS/neocash"
 license=('MIT')
+depends=('rust' 'git')
 makedepends=('cargo')
-source=("https://github.com/ImVILLS/neocash/archive/v$pkgver.tar.gz")
-sha256sums=('66649774162ae3c0757682ec3f10690abe4173e27ae593808b6e959eea9af661')
+source=("git+$url.git#tag=v$pkgver")
+sha256sums=('SKIP')
 
 build() {
-  cd "$srcdir/neocash-$pkgver"
+  cd "$srcdir/neocash"
   cargo build --release --locked
 }
 
 package() {
-  cd "$srcdir/neocash-$pkgver"
+  cd "$srcdir/neocash"
   install -Dm755 "target/release/neocash" "$pkgdir/usr/bin/neocash"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }

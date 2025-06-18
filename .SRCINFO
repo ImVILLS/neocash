@@ -1,0 +1,14 @@
+pkgbase = neocash-git
+	pkgdesc = New Era of Community-Adaptive SHell
+	pkgver = 1.0.2
+	pkgrel = 1
+	url = https://github.com/ImVILLS/neocash
+	arch = x86_64
+	license = MIT
+	makedepends = cargo
+	depends = rust
+	depends = git
+	source = git+https://github.com/ImVILLS/neocash.git#tag=v1.0.2
+	sha256sums = SKIP
+
+pkgname = neocash-git
