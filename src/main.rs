@@ -1,3 +1,5 @@
+// main.rs
+
 use std::fs;
 use std::sync::atomic::{AtomicBool, Ordering};
 use ctrlc::set_handler;
@@ -13,6 +15,7 @@ use rustyline::{
     Helper, 
     Context,
 };
+use neocash::commands;
 use neocash::config::ShellConfig;
 use neocash::prompt::{get_prompt_context, render_prompt};
 use neocash::completion::ShellCompleter;
@@ -78,19 +81,20 @@ fn main() {
 
         match rl.readline(&prompt) {
             Ok(line) => {
-                let line = line.trim();
-                if line.is_empty() {
-                    continue;
-                }
+            let line = line.trim();
+            if line.is_empty() {
+                continue;
+            }
 
-                rl.add_history_entry(line).ok();
-                
-                if line == "exit" {
-                    break;
-                }
+            rl.add_history_entry(line).ok();
 
-                last_exit_code = execute_command(line);
+            if line == "exit" {
+                break;
+            }
+
+            last_exit_code = execute_command(line, &config);
             },
+
             Err(ReadlineError::Interrupted) => {
                 println!("Type 'exit' to quit");
             },
@@ -117,9 +121,20 @@ fn setup_signal_handlers() {
     }).expect("Error setting Ctrl-C handler");
 }
 
-fn execute_command(cmd: &str) -> i32 {
+fn execute_command(cmd: &str, config: &ShellConfig) -> i32 {
     let expanded_cmd = shellexpand::tilde(cmd).into_owned();
     
+    // Проверяем встроенные команды
+    match commands::execute(&expanded_cmd, config) {  // Убрали neocash::
+        Ok(code) => return code,
+        Err(e) if e.contains("No such file or directory") => {
+            eprintln!("{}", e);
+            return 1;
+        },
+        Err(_) => {}, // Продолжаем выполнение как системной команды
+    }
+
+    // Если это не встроенная команда, выполняем как системную
     let output = std::process::Command::new("sh")
         .arg("-c")
         .arg(&expanded_cmd)

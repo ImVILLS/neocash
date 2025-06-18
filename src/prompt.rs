@@ -1,7 +1,9 @@
+// prompt.rs
+
 use chrono::Local;
 use std::{
     env,
-    path::PathBuf,  // Убрали неиспользуемый импорт Path
+    path::{Path, PathBuf},
 };
 use crate::config::{ShellConfig, PathDisplayMode};
 
@@ -56,62 +58,59 @@ pub fn get_prompt_context(last_error: i32, config: &ShellConfig) -> PromptContex
 }
 
 fn format_path(path: &str, mode: &PathDisplayMode) -> String {
-    let home_dir = dirs::home_dir()
-        .map(|p| p.display().to_string())
-        .unwrap_or_else(|| "~".to_string());
+    let home_dir_path = dirs::home_dir().unwrap_or_else(|| PathBuf::from("~"));
 
     let path_buf = PathBuf::from(path);
-    let is_home = path.starts_with(&home_dir);
+    let is_home = Path::new(path).starts_with(&home_dir_path);
 
     match mode {
         PathDisplayMode::Full => path.to_string(),
-        
+
         PathDisplayMode::Short => {
             if is_home {
-                path.replacen(&home_dir, "~", 1)
+                let home_str = home_dir_path.to_string_lossy();
+                path.replacen(&*home_str, "~", 1)
             } else {
                 path.to_string()
             }
-        },
-        
+        }
+
         PathDisplayMode::ShortAll => {
-            if path == home_dir {
-                return "~".to_string();
+            let mut result = String::new();
+
+            let components: Vec<_> = path_buf.components().collect();
+            let home_components: Vec<_> = home_dir_path.components().collect();
+
+            let mut i = 0;
+            if components.starts_with(&home_components) {
+                result.push('~');
+                i = home_components.len();
             }
 
-            let mut result = String::new();
-            let components: Vec<_> = path_buf.components().collect();
+            let last = components.len() - 1;
 
-            for (i, component) in components.iter().enumerate() {
+            for (j, component) in components.iter().enumerate().skip(i) {
                 let part = component.as_os_str().to_string_lossy();
-                
-                if i == 0 && is_home {
-                    result.push('~');
-                    continue;
+
+                if !result.is_empty() && !result.ends_with('/') {
+                    result.push('/');
                 }
 
-                if !part.is_empty() {
-                    if !result.is_empty() && !result.ends_with('/') {
-                        result.push('/');
+                if j < last {
+                    if let Some(c) = part.chars().next() {
+                        result.push(c);
                     }
-
-                    if i < components.len() - 1 {
-                        // Для всех кроме последнего - первый символ
-                        if let Some(c) = part.chars().next() {
-                            result.push(c);
-                        }
-                    } else {
-                        // Последний компонент полностью
-                        result.push_str(&part);
-                    }
+                } else {
+                    result.push_str(&part);
                 }
             }
 
             result
-        },
-        
+        }
+
         PathDisplayMode::Current => {
-            path_buf.file_name()
+            path_buf
+                .file_name()
                 .and_then(|n| n.to_str())
                 .unwrap_or("?")
                 .to_string()

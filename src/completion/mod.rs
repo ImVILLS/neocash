@@ -1,3 +1,5 @@
+// completer/mod.rs
+
 mod completer;
 mod menu;
 

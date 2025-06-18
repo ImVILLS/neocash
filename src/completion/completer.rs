@@ -1,3 +1,5 @@
+// completion/completer.rs
+
 use std::collections::HashSet;
 use std::path::PathBuf;
 use std::ffi::OsStr;

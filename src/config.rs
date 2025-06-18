@@ -1,3 +1,5 @@
+// config.rs
+
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs, path::PathBuf};
 
@@ -19,6 +21,7 @@ pub struct PromptConfig {
     pub show_time: bool,
     pub show_user: bool,
     pub show_host: bool,
+    pub default_editor: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]  // Уже содержит Clone
@@ -63,6 +66,7 @@ impl Default for ShellConfig {
                 show_time: true,
                 show_user: true,
                 show_host: true,
+                default_editor: "nano".to_string(),
             },
             colors,
             history_size: 1000,
