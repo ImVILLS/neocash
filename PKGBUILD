@@ -9,7 +9,7 @@ license=('MIT')
 depends=('rust' 'git')
 makedepends=('cargo')
 source=("git+$url.git#tag=v$pkgver")
-sha256sums=('SKIP')
+sha256sums=('8a7477b402b570164d57e3aca1f4d9da99ec8e11b371793167bec18fc3c9421b')
 
 build() {
   cd "$srcdir/neocash"
