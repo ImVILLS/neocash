@@ -2,6 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs, path::PathBuf};
+use dirs;
+use toml;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "kebab-case")]
@@ -12,7 +14,7 @@ pub enum PathDisplayMode {
     Current,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]  // Добавлен Clone
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PromptConfig {
     pub template: String,
     pub path_mode: PathDisplayMode,
@@ -21,15 +23,17 @@ pub struct PromptConfig {
     pub show_time: bool,
     pub show_user: bool,
     pub show_host: bool,
-    pub default_editor: String,
+    pub default_editor: String, 
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]  // Уже содержит Clone
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ShellConfig {
     pub prompt: PromptConfig,
     pub colors: HashMap<String, String>,
     pub history_size: usize,
     pub history_file: String,
+    #[serde(skip)]
+    pub config_path: PathBuf,
 }
 
 impl Default for ShellConfig {
@@ -71,13 +75,14 @@ impl Default for ShellConfig {
             colors,
             history_size: 1000,
             history_file: "~/.local/share/ncash/history.txt".to_string(),
+            config_path: Self::get_default_config_path(),
         }
     }
 }
 
 impl ShellConfig {
-    pub fn load() -> Self {
-        let config_path = Self::get_config_path();
+    pub fn load(custom_path: Option<PathBuf>) -> Self {
+        let config_path = custom_path.unwrap_or_else(Self::get_default_config_path);
         let default_config = Self::default();
 
         if let Some(parent) = config_path.parent() {
@@ -87,27 +92,43 @@ impl ShellConfig {
         match fs::read_to_string(&config_path) {
             Ok(contents) => match toml::from_str::<ShellConfig>(&contents) {
                 Ok(mut config) => {
+                    config.config_path = config_path;
                     for (k, v) in &default_config.colors {
                         config.colors.entry(k.clone()).or_insert(v.clone());
                     }
                     config
-                },
+                }
                 Err(e) => {
                     eprintln!("Config error: {}. Using defaults.", e);
-                    default_config
+
+                    let mut config = default_config;
+                    config.config_path = config_path;
+                    config
                 }
             },
             Err(_) => {
-                fs::write(&config_path, toml::to_string_pretty(&default_config).unwrap()).ok();
-                default_config
+                // If the file does not exist, create it with default values
+                fs::write(
+                    &config_path,
+                    toml::to_string_pretty(&default_config).unwrap(),
+                )
+                .ok();
+                // Important: if the file is created, we need to set the config_path correctly
+                let mut config = default_config;
+                config.config_path = config_path;
+                config
             }
         }
     }
 
-    pub fn get_config_path() -> PathBuf {
+    pub fn get_default_config_path() -> PathBuf {
         dirs::config_dir()
             .unwrap_or_else(|| PathBuf::from("."))
             .join("neocash/ncashrc")
+    }
+
+    pub fn get_active_config_path(&self) -> &PathBuf {
+        &self.config_path
     }
 
     pub fn get_history_path(&self) -> PathBuf {

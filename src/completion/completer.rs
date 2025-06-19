@@ -1,14 +1,14 @@
 // completion/completer.rs
 
+use crate::completion::CompletionMenu;
+use rustyline::{
+    Context, Result as RLResult,
+    completion::{Completer, Pair},
+};
 use std::collections::HashSet;
-use std::path::PathBuf;
 use std::ffi::OsStr;
 use std::fs;
-use rustyline::{
-    completion::{Completer, Pair},
-    Context, Result as RLResult
-};
-use crate::completion::CompletionMenu;
+use std::path::PathBuf;
 
 #[derive(Clone)]
 pub struct ShellCompleter {
@@ -52,7 +52,10 @@ impl ShellCompleter {
         self.get_all_commands()
             .into_iter()
             .filter(|cmd| cmd.starts_with(prefix))
-            .map(|cmd| Pair { display: cmd.clone(), replacement: cmd })
+            .map(|cmd| Pair {
+                display: cmd.clone(),
+                replacement: cmd,
+            })
             .collect()
     }
 
@@ -62,9 +65,7 @@ impl ShellCompleter {
 
         if let Some(parent) = path.parent() {
             if let Ok(entries) = fs::read_dir(parent) {
-                let file_stem = path.file_stem()
-                    .and_then(OsStr::to_str)
-                    .unwrap_or("");
+                let file_stem = path.file_stem().and_then(OsStr::to_str).unwrap_or("");
 
                 for entry in entries.filter_map(|e| e.ok()) {
                     if let Some(name) = entry.file_name().to_str() {
@@ -75,7 +76,7 @@ impl ShellCompleter {
                             } else {
                                 name.to_string()
                             };
-                            
+
                             completions.push(Pair {
                                 display: display.clone(),
                                 replacement: display,
@@ -97,15 +98,13 @@ impl ShellCompleter {
         }
 
         let last_part = parts.last().unwrap();
-        !line.ends_with(char::is_whitespace) &&
-        !last_part.contains(|c| matches!(c, '|' | '&' | ';'))
+        !line.ends_with(char::is_whitespace)
+            && !last_part.contains(|c| matches!(c, '|' | '&' | ';'))
     }
 
     fn show_completion_menu(&self, items: Vec<Pair>) -> Option<String> {
-        let item_strings: Vec<String> = items.iter()
-            .map(|p| p.display.clone())
-            .collect();
-        
+        let item_strings: Vec<String> = items.iter().map(|p| p.display.clone()).collect();
+
         let mut menu = CompletionMenu::new(item_strings);
         menu.show()
     }
@@ -129,10 +128,13 @@ impl Completer for ShellCompleter {
 
         if completions.len() > 1 {
             if let Some(selected) = self.show_completion_menu(completions.clone()) {
-                return Ok((pos - prefix.len(), vec![Pair {
-                    display: selected.clone(),
-                    replacement: selected,
-                }]));
+                return Ok((
+                    pos - prefix.len(),
+                    vec![Pair {
+                        display: selected.clone(),
+                        replacement: selected,
+                    }],
+                ));
             }
         }
 

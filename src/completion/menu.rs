@@ -3,15 +3,15 @@
 use crossterm::{
     event::{self, Event, KeyCode, KeyEvent},
     execute,
-    terminal::{EnterAlternateScreen, LeaveAlternateScreen, enable_raw_mode, disable_raw_mode},
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
 use std::io::stdout;
 use tui::{
-    backend::CrosstermBackend,
-    widgets::{Block, Borders, List, ListItem, ListState},
     Terminal,
-    layout::{Layout, Constraint, Direction},
-    style::{Style, Color, Modifier},
+    backend::CrosstermBackend,
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Modifier, Style},
+    widgets::{Block, Borders, List, ListItem, ListState},
 };
 
 pub struct CompletionMenu {
@@ -22,7 +22,7 @@ pub struct CompletionMenu {
 
 impl CompletionMenu {
     pub fn new(items: Vec<String>) -> Self {
-        Self { 
+        Self {
             items,
             selected: 0,
             filter: String::new(),
@@ -40,7 +40,9 @@ impl CompletionMenu {
         list_state.select(Some(self.selected));
 
         let result = loop {
-            let filtered_items: Vec<String> = self.items.iter()
+            let filtered_items: Vec<String> = self
+                .items
+                .iter()
                 .filter(|item| item.starts_with(&self.filter))
                 .cloned()
                 .collect();
@@ -54,39 +56,42 @@ impl CompletionMenu {
                 self.selected = filtered_items.len().saturating_sub(1);
             }
 
-            terminal.draw(|f| {
-                let size = f.size();
-                let block = Block::default()
-                    .borders(Borders::ALL)
-                    .title(format!("Completion (Filter: '{}') ↑/↓: navigate, Enter: select, Esc: cancel", self.filter));
-                
-                f.render_widget(block, size);
+            terminal
+                .draw(|f| {
+                    let size = f.size();
+                    let block = Block::default().borders(Borders::ALL).title(format!(
+                        "Completion (Filter: '{}') ↑/↓: navigate, Enter: select, Esc: cancel",
+                        self.filter
+                    ));
 
-                let list_area = Layout::default()
-                    .direction(Direction::Vertical)
-                    .margin(1)
-                    .constraints([Constraint::Min(1)].as_ref())
-                    .split(size);
+                    f.render_widget(block, size);
 
-                let items: Vec<ListItem> = filtered_items
-                    .iter()
-                    .enumerate()
-                    .map(|(i, item)| {
-                        let style = if i == self.selected {
-                            Style::default()
-                                .fg(Color::Yellow)
-                                .add_modifier(Modifier::BOLD)
-                        } else {
-                            Style::default()
-                        };
-                        ListItem::new(item.as_str()).style(style)
-                    })
-                    .collect();
+                    let list_area = Layout::default()
+                        .direction(Direction::Vertical)
+                        .margin(1)
+                        .constraints([Constraint::Min(1)].as_ref())
+                        .split(size);
 
-                let list = List::new(items)
-                    .highlight_style(Style::default().bg(Color::DarkGray));
-                f.render_stateful_widget(list, list_area[0], &mut list_state);
-            }).ok()?;
+                    let items: Vec<ListItem> = filtered_items
+                        .iter()
+                        .enumerate()
+                        .map(|(i, item)| {
+                            let style = if i == self.selected {
+                                Style::default()
+                                    .fg(Color::Yellow)
+                                    .add_modifier(Modifier::BOLD)
+                            } else {
+                                Style::default()
+                            };
+                            ListItem::new(item.as_str()).style(style)
+                        })
+                        .collect();
+
+                    let list =
+                        List::new(items).highlight_style(Style::default().bg(Color::DarkGray));
+                    f.render_stateful_widget(list, list_area[0], &mut list_state);
+                })
+                .ok()?;
 
             if let Event::Key(KeyEvent { code, .. }) = event::read().ok()? {
                 match code {

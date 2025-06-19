@@ -1,11 +1,11 @@
 // prompt.rs
 
+use crate::config::{PathDisplayMode, ShellConfig};
 use chrono::Local;
 use std::{
     env,
     path::{Path, PathBuf},
 };
-use crate::config::{ShellConfig, PathDisplayMode};
 
 pub struct PromptContext {
     pub time: String,
@@ -108,13 +108,11 @@ fn format_path(path: &str, mode: &PathDisplayMode) -> String {
             result
         }
 
-        PathDisplayMode::Current => {
-            path_buf
-                .file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("?")
-                .to_string()
-        }
+        PathDisplayMode::Current => path_buf
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("?")
+            .to_string(),
     }
 }
 
